@@ -19,6 +19,7 @@ public class TopdownMotor2D : MonoBehaviour
     [Header("Aim")]
     public bool rotateBodyToMouse = true;
     public Transform aimPivot;
+    public MouseCursorFollow _mouseCursorFollow;
     Rigidbody2D rb;
     Camera cam;
 
@@ -70,6 +71,7 @@ public class TopdownMotor2D : MonoBehaviour
 
         Vector2 mouseWorld = cam.ScreenToWorldPoint(Input.mousePosition);
         Vector2 aimDir = mouseWorld - rb.position;
+        _mouseCursorFollow.UpdateCursor(mouseWorld);
 
         if (aimDir.sqrMagnitude > 0.0001f)
         {
