@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MouseCursorFollow : MonoBehaviour
 {
-    public Camera cam;
+    [SerializeField] Camera cam;
     public float zOffset = 0f;
     public bool clampDistance = false;
     public float maxDistance = 5f;
@@ -11,7 +11,7 @@ public class MouseCursorFollow : MonoBehaviour
     void Start()
     {
         if (!cam) cam = Camera.main;
-        Cursor.visible = false; // ẩn cursor hệ thống
+        UpdateVisible(true); 
     }
 
     void Update()
@@ -30,9 +30,17 @@ public class MouseCursorFollow : MonoBehaviour
         // }
         // transform.position = mouseWorld;
 
+        Vector2 mouseWorld = cam.ScreenToWorldPoint(Input.mousePosition);
+        UpdateCursor(mouseWorld);
+
     }
     public void UpdateCursor(Vector3 pos)
     {
         transform.position = pos;
     }
+
+    public void UpdateVisible(bool visible) => Cursor.visible = visible;
+
+
+
 }

@@ -69,11 +69,12 @@ public class GameState : MonoBehaviour, GameStateMachine
     }
 
     SettingUI _settingUI;
+    public PlayerBehavior _playerBehavior;
 
     public IEnumerator Init()
     {
         SetFrameApp();
-        yield return null;
+        yield return _playerBehavior.Init();
     }
 
     void SetFrameApp()

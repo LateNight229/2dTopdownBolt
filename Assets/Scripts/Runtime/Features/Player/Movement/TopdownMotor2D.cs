@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -19,7 +20,6 @@ public class TopdownMotor2D : MonoBehaviour
     [Header("Aim")]
     public bool rotateBodyToMouse = true;
     public Transform aimPivot;
-    public MouseCursorFollow _mouseCursorFollow;
     Rigidbody2D rb;
     Camera cam;
 
@@ -33,6 +33,8 @@ public class TopdownMotor2D : MonoBehaviour
     [Tooltip("Nếu bật: dash xong đứng ngay, không trượt")]
     public bool stopAfterDash = true; // ⭐ THÊM
 
+
+    PlayerBehavior _playerBehavior;    
     bool isDashing;
     float dashTimer;
     float dashCooldownTimer;
@@ -41,8 +43,10 @@ public class TopdownMotor2D : MonoBehaviour
     int defaultLayer;
     int invincibleLayer;
 
-    void Awake()
-    {
+
+    public IEnumerator Init(PlayerBehavior playerBehavior)
+    {   
+        _playerBehavior = playerBehavior;
         rb = GetComponent<Rigidbody2D>();
         cam = Camera.main;
 
@@ -53,25 +57,28 @@ public class TopdownMotor2D : MonoBehaviour
 
         defaultLayer = gameObject.layer;
         invincibleLayer = LayerMask.NameToLayer("Invincible");
+        yield return null;
     }
 
-    void Update()
+    public void UpdateMove()
     {
         // INPUT
+        Vector2 mouseWorld = cam.ScreenToWorldPoint(Input.mousePosition);
+        _playerBehavior.mouseCursorFollow.UpdateCursor(mouseWorld);
+        
         inputDir = new Vector2(
             Input.GetAxisRaw("Horizontal"),
             Input.GetAxisRaw("Vertical")
         );
 
+        _playerBehavior.animationControl.UpdateMovement(inputDir);
         if (normalizeDiagonal && inputDir.sqrMagnitude > 1f)
             inputDir.Normalize();
 
         // AIM
         if (!cam) return;
 
-        Vector2 mouseWorld = cam.ScreenToWorldPoint(Input.mousePosition);
         Vector2 aimDir = mouseWorld - rb.position;
-        _mouseCursorFollow.UpdateCursor(mouseWorld);
 
         if (aimDir.sqrMagnitude > 0.0001f)
         {
@@ -88,7 +95,7 @@ public class TopdownMotor2D : MonoBehaviour
             TryDash();
     }
 
-    void FixedUpdate()
+    public void FixedUpdateMove()
     {
         // Cooldown
         if (dashCooldownTimer > 0f)
