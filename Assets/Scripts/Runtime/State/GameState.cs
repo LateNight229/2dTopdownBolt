@@ -74,7 +74,6 @@ public class GameState : MonoBehaviour, GameStateMachine
 
     public IEnumerator Init()
     {   
-        print("init gameState");
         SetFrameApp();
         yield return _playerBehavior.Init(this);
     }

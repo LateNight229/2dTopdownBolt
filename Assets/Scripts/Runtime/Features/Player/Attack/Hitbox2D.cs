@@ -86,6 +86,7 @@ public class Hitbox2D : MonoBehaviour
 
             dmg.TakeHit(_hit);
             _playerBehavior.gameState._simpleCameraShake.Play();
+           
         }
     }
 

@@ -33,7 +33,6 @@ public class SimpleCameraShake : MonoBehaviour
             t += Time.deltaTime;
             Vector2 offset = Random.insideUnitCircle * mag;
             camTransform.localPosition = originalLocalPos + new Vector3(offset.x, offset.y, 0f);
-            print($"[CoShake] -> {offset} {mag} {camTransform.localPosition}");
             yield return null;
         }
         camTransform.localPosition = originalLocalPos;

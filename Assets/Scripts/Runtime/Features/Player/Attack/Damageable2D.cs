@@ -10,6 +10,8 @@ public class Damageable2D : MonoBehaviour
 
     [SerializeField] StaggerController2D staggerCtrl;
     [SerializeField] Rigidbody2D rb;
+    [SerializeField] SpriteFlash2D _spriteFlash;
+
 
     int _hp;
     float _invincibleUntil;
@@ -23,6 +25,7 @@ public class Damageable2D : MonoBehaviour
     {
         _hp = maxHP;
         if (!rb) rb = GetComponent<Rigidbody2D>();
+        if(!_spriteFlash) _spriteFlash = GetComponent<SpriteFlash2D>();
     }
 
     public bool CanTakeHit(in Hitbox2D.HitInfo hit)
@@ -42,6 +45,8 @@ public class Damageable2D : MonoBehaviour
     public void TakeHit(in Hitbox2D.HitInfo hit)
     {
         if (!CanTakeHit(hit)) return;
+
+        _spriteFlash.PlayRed();
 
         if (hit.Attacker != null)
             _lastAttackIdByAttacker[hit.Attacker.GetInstanceID()] = hit.AttackInstanceId;

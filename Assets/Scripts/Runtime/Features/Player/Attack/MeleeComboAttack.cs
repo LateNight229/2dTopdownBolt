@@ -37,7 +37,6 @@ public class MeleeComboAttack : MonoBehaviour, IAttackModule
 
     public void Init(PlayerBehavior owner)
     {   
-        print("Init melee");
         _playerBehavior = owner;
         // đăng ký callback animation end
         _playerBehavior.animationControl.callBackEnd += OnAnimationEnd;
