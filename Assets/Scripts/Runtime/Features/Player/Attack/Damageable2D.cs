@@ -18,6 +18,7 @@ public class Damageable2D : MonoBehaviour
 
     // chống “double apply” theo từng attacker + attackInstanceId (phòng trường hợp nhiều hitbox/bug)
     readonly Dictionary<int, int> _lastAttackIdByAttacker = new Dictionary<int, int>(4);
+    [SerializeField] Vector3 popupOffset = new Vector3(0f, 0.6f, 0f);
 
     public int HP => _hp;
 
@@ -47,6 +48,9 @@ public class Damageable2D : MonoBehaviour
         if (!CanTakeHit(hit)) return;
 
         _spriteFlash.PlayRed();
+        // DamagePopupSpawner.Instance?.Spawn(hit.Damage, transform.position + popupOffset);
+        DamagePopupSpawner.Instance?.Spawn(hit.Damage, transform.position, new Vector3(0, 0.8f, 0));
+
 
         if (hit.Attacker != null)
             _lastAttackIdByAttacker[hit.Attacker.GetInstanceID()] = hit.AttackInstanceId;
