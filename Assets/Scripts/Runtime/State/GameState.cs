@@ -69,13 +69,14 @@ public class GameState : MonoBehaviour, GameStateMachine
     }
 
     SettingUI _settingUI;
+    public SimpleCameraShake _simpleCameraShake;
     public PlayerBehavior _playerBehavior;
 
     public IEnumerator Init()
     {   
         print("init gameState");
         SetFrameApp();
-        yield return _playerBehavior.Init();
+        yield return _playerBehavior.Init(this);
     }
 
     void SetFrameApp()

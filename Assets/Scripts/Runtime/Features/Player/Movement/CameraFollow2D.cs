@@ -6,13 +6,14 @@ public class CameraFollow2D : MonoBehaviour
 {
     [SerializeField] bool _stopMove = false;
     public Transform target;
-    public float smooth = 12f;
+    [SerializeField] float smooth = 1f;
     [SerializeField] float _defaultSize = 8f;
-    public Camera _cam;
 
+    Camera _cam;
+    
     void Start()
     {   
-        _cam = GetComponent<Camera>();
+        _cam = GetComponentInChildren<Camera>();
         UpdateSize(_defaultSize);
     }
 

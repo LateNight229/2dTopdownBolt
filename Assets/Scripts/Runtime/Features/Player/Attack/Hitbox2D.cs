@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,11 +37,14 @@ public class Hitbox2D : MonoBehaviour
 
     bool _active;
     HitInfo _hit;
+    PlayerBehavior _playerBehavior;
 
-    void Awake()
-    {
+    public IEnumerator Init(PlayerBehavior playerBehavior)
+    {   
+        _playerBehavior = playerBehavior;
         if (origin == null) origin = transform;
         _buffer = new Collider2D[Mathf.Max(4, bufferSize)];
+        yield return null;
     }
 
     public void BeginSwing(in HitInfo hit)
@@ -81,6 +85,7 @@ public class Hitbox2D : MonoBehaviour
             if (!_hitThisSwing.Add(dmg)) continue;
 
             dmg.TakeHit(_hit);
+            _playerBehavior.gameState._simpleCameraShake.Play();
         }
     }
 

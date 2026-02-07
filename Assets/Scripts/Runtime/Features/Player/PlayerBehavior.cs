@@ -9,9 +9,11 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField] CameraFollow2D _cameraFollow2D;
     [SerializeField] AnimationControl _animationControl;
     [SerializeField] MouseCursorFollow _mouseCursorFollow;
+    [SerializeField] Hitbox2D _hitbox2D;
 
     public AnimationControl animationControl => _animationControl;
     public MouseCursorFollow mouseCursorFollow => _mouseCursorFollow;
+    public Hitbox2D hitbox2D => _hitbox2D;
 
     [Header("Attack (plug & play)")]
     [SerializeField] MonoBehaviour _attackBehaviour; // drag component implement IAttackModule
@@ -19,9 +21,12 @@ public class PlayerBehavior : MonoBehaviour
     public IAttackModule attack => _attack;
 
     bool _doneInit;  
+    GameState _gameState;
+    public GameState gameState => _gameState;
 
-    public IEnumerator Init()
-    {       
+    public IEnumerator Init(GameState gameState)
+    {           
+        _gameState = gameState;
         _doneInit = false;
         print("Init Player" + _attack != null);
          // cache attack module
@@ -36,6 +41,7 @@ public class PlayerBehavior : MonoBehaviour
         }
 
         yield return _topdownMotor2D.Init(this);
+        yield return _hitbox2D.Init(this);
         _doneInit = true;
 
     }
