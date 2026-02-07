@@ -18,9 +18,9 @@ public class AnimationControl : MonoBehaviour
     public string[] clip = new string[] { Idle, Walk, Run, Attack1, Attack2, Attack3, Q, E };
 
     public delegate void CallBack(int value);
-    public CallBack callBack;
+    public CallBack callBackEnd;
     public delegate void CallBackSound(string value);
-    public CallBackSound callBackSound;
+    public CallBackSound callBackStartDamage;
 
     public int UpdateMovement(Vector3 move)
     {
@@ -67,7 +67,14 @@ public class AnimationControl : MonoBehaviour
     public void AddEvent(string clip_name, int value, float[] percents)
     {
         AnimationClip animationClip = FindAnimation(clip_name);
-        print($"anim");
+        if (animationClip == null) return;
+
+        AnimationEvent[] events = animationClip.events;
+        for (int i = 0; i < events.Length; i++)
+        {
+            if (events[i].functionName == "AnimationEnd" && events[i].intParameter == value)
+                return;
+        }
         AnimationEvent _aEvents = new()
         {
             intParameter = value,
@@ -75,28 +82,35 @@ public class AnimationControl : MonoBehaviour
             time = animationClip.length,
         };
         animationClip.AddEvent(_aEvents);
+        print($"anim {animationClip?.name} findfrom {clip_name} {_aEvents?.time}");
 
-        foreach (float percent in percents)
-        {
-            if (percent >= 0 && percent <= 1)
+        print($"{percents.Length} percents[0]");
+        if (percents != null && percents.Length > 0)
+        {   
+            foreach (float percent in percents)
             {
-                AnimationEvent _bEvents = new()
+                if (percent >= 0 && percent <= 1)
                 {
-                    stringParameter = clip_name,
-                    functionName = "PlaySound",
-                    time = animationClip.length * percent,
-                };
-                animationClip.AddEvent(_bEvents);
+                    AnimationEvent _bEvents = new()
+                    {
+                        stringParameter = clip_name,
+                        functionName = "PlaySound",
+                        time = animationClip.length * percent,
+                    };
+                    animationClip.AddEvent(_bEvents);
+                    print($"anim b {animationClip?.name} findfrom {clip_name} {_bEvents?.time}");
+                }
             }
         }
     }
     public void AnimationEnd(int value)
-    {
-        callBack?.Invoke(value);
+    {   
+        print(value);
+        callBackEnd?.Invoke(value);
     }
     public void PlaySound(string value)
     {
-        callBackSound?.Invoke(value);
+        callBackStartDamage?.Invoke(value);
     }
 
     public AnimationClip FindAnimation(string name)

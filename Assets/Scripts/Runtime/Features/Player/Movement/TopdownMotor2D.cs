@@ -71,7 +71,14 @@ public class TopdownMotor2D : MonoBehaviour
             Input.GetAxisRaw("Vertical")
         );
 
-        _playerBehavior.animationControl.UpdateMovement(inputDir);
+        //_playerBehavior.animationControl.UpdateMovement(inputDir);
+        if (!(_playerBehavior.attack?.IsAttacking ?? false))
+        {
+            _playerBehavior.animationControl.UpdateMovement(new Vector3(
+                Input.GetAxisRaw("Horizontal"),
+                Input.GetAxisRaw("Vertical"),
+                0));
+        }
         if (normalizeDiagonal && inputDir.sqrMagnitude > 1f)
             inputDir.Normalize();
 

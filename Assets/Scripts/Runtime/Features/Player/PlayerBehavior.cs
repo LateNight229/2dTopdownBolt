@@ -16,13 +16,14 @@ public class PlayerBehavior : MonoBehaviour
     [Header("Attack (plug & play)")]
     [SerializeField] MonoBehaviour _attackBehaviour; // drag component implement IAttackModule
     IAttackModule _attack;
+    public IAttackModule attack => _attack;
 
     bool _doneInit;  
 
     public IEnumerator Init()
     {       
         _doneInit = false;
-
+        print("Init Player" + _attack != null);
          // cache attack module
         _attack = _attackBehaviour as IAttackModule;
         if (_attack == null)
