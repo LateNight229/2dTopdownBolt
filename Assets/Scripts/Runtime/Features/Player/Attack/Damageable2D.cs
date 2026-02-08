@@ -48,9 +48,7 @@ public class Damageable2D : MonoBehaviour
         if (!CanTakeHit(hit)) return;
 
         _spriteFlash.PlayRed();
-        // DamagePopupSpawner.Instance?.Spawn(hit.Damage, transform.position + popupOffset);
-        DamagePopupSpawner.Instance?.Spawn(hit.Damage, transform.position, new Vector3(0, 0.8f, 0));
-
+        DamagePopupSpawner.Instance?.Spawn(hit.Damage, transform.position + popupOffset);
 
         if (hit.Attacker != null)
             _lastAttackIdByAttacker[hit.Attacker.GetInstanceID()] = hit.AttackInstanceId;
